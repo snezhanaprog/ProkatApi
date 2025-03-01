@@ -25,8 +25,8 @@ async def list_schemas():
     return await get_object_schemas()
 
 @router.get("/schemas/{schema_id}/objects")
-async def list_objects(schema_id: str):
-    return await get_objects_in_schema(schema_id)
+async def list_objects(schema_id: str, object_type: str | None, fields: list[str] | None = None):
+    return await get_objects_in_schema(schema_id, object_type, fields)
 
 @router.get("/schemas/{schema_id}/objecttypes")
 async def list_objectstypes(schema_id: str):

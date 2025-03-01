@@ -1,17 +1,9 @@
 def shorten_json(data: dict) -> dict:
     """
     Извлекает из длинного JSON с данными объекта следующие поля:
-      - Key
-      - Name
-      - Created
-      - Updated
-      - Статус
-      - Стоимость аренды в 1 час
+      - Key - Name - Created - Updated - Статус - Стоимость аренды в 1 час
       - Тип (в данном случае "Категория" – имя типа объекта)
-      - Возраст
-      - Цвет
-      - Производитель
-      - url_image (путь к картинке объекта)
+      - Возраст - Цвет - Производитель - url_image (путь к картинке объекта)
     """
     result = {}
 
@@ -60,3 +52,21 @@ def shorten_json(data: dict) -> dict:
             result["Производитель"] = value
 
     return result
+
+
+def structure_objects(raw_data: dict) -> list:
+    """
+    Принимает сырой ответ (JSON) от Insight API, содержащий объекты,
+    и возвращает список объектов с нужными полями (например, с помощью функции shorten_json).
+    """
+    structured = []
+    # Предположим, что объекты находятся в ключе "objectEntries"
+    for entry in raw_data.get("objectEntries", []):
+        # Если структура такая, что данные объекта хранятся под ключом "object"
+        obj = entry.get("object", {})
+        if obj:
+            structured.append(shorten_json(obj))
+        else:
+            # Если объекты не вложены, можно использовать entry напрямую
+            structured.append(shorten_json(entry))
+    return structured
